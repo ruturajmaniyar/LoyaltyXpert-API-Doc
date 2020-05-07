@@ -1,0 +1,1040 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LoyaltyXpert",
+    "version": "3.0",
+    "description": "LoyaltyXpert Mobile Application: Version 3.0",
+    "contact": {
+      "name": "Ruturaj Maniyar",
+      "email": "ruturaj.maniyar@ecosmob.com",
+      "url": "https://www.loyaltyxpert.com/contact/"
+    },
+    "termsOfService": "https://www.loyaltyxpert.com/contact/",
+    "license": {
+      "name": "MIT",
+      "url": "https://www.loyaltyxpert.com/contact/"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://159.69.147.207:7002/api/v3.0/customers"
+    }
+  ],
+  "paths": {
+    "check-version": {
+      "get": {
+        "summary": "Check active mobile application version",
+        "responses": {
+          "200": {
+            "description": "OK : Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 : OK": {
+                    "value": {
+                      "code": 200,
+                      "message": "You have current Version"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 : Bad Request : Missing Header Parameters": {
+                    "value": {
+                      "code": 400,
+                      "message": "Some header parameters are missing, kindly check and try again."
+                    }
+                  },
+                  "400 : Bad Request : Application ID Invalid": {
+                    "value": {
+                      "code": 400,
+                      "message": "Invalid Application ID."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "426": {
+            "description": "Upgrade Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "426 : Upgrade Required": {
+                    "value": {
+                      "code": 426,
+                      "message": "New update is available. Please update!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "505": {
+            "description": "Version Not Supported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "505 : Version Not Supported": {
+                    "value": {
+                      "code": 505,
+                      "message": "Version not supported You have to update it."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-Check-URL",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            },
+            "in": "header",
+            "name": "Content-Type",
+            "description": "",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Mi A3, Samsung Note, Oppo 11 pro"
+            },
+            "in": "header",
+            "name": "X-device-id",
+            "required": true,
+            "description": "Mobile device unique id"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "en"
+            },
+            "in": "header",
+            "name": "X-device-name",
+            "required": true,
+            "description": "Mobile device name like MI A3, Samsung Note 1 etc\n"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "en,hn,tl"
+            },
+            "in": "header",
+            "name": "X-localisation",
+            "required": true,
+            "description": "Set application language"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "com.[tenanat_id].loyalty"
+            },
+            "in": "header",
+            "name": "X-application-id",
+            "required": true,
+            "description": "Application bundle name that store in backend portal."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "",
+              "enum": [
+                "android",
+                "ios"
+              ],
+              "default": ""
+            },
+            "in": "header",
+            "name": "X-platform",
+            "required": true,
+            "description": "Mobile device OS type"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "5.0, 7.0, 9.0"
+            },
+            "in": "header",
+            "name": "X-platform-version",
+            "required": true,
+            "description": "Mobile device OS version"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2.0, 2.3, 3.0"
+            },
+            "in": "header",
+            "name": "X-app-version",
+            "required": true,
+            "description": "Active version of API"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-device-mac-address",
+            "required": true,
+            "description": "Mobile device mac-address"
+          }
+        ],
+        "description": "Check Application version is active, deprecated or terminated.\n\n200 : OK : API calling with current active apps version\n\n426 : Upgrade Required : API calling with deprecated apps version and new Apps version available on google play store or Apple app store. Forcefully upgration not needed.\n\n405 : Upgrade Required : API calling with terminated apps version and new Apps version available on google play store or Apple app store. Forcefully upgration is required.",
+        "tags": [
+          "check",
+          "application",
+          "version",
+          "3.0"
+        ]
+      },
+      "parameters": []
+    },
+    "/mobile-branding": {
+      "get": {
+        "summary": "Get Branding Information",
+        "tags": [
+          "mobile",
+          "branding",
+          "3.0"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK : Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "splash_screen_string": {
+                          "type": "string"
+                        },
+                        "dashboard_logo": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 : OK": {
+                    "value": {
+                      "code": 200,
+                      "message": "Branding details updated successfully",
+                      "data": {
+                        "login_screen_logo": "http://stagingdemo.loyaltyxpert.staging:7002/lxmedia/tenant/6288853995/mobile_branding/login_screen/login_screen_logo_file_5_6288853995_1577278288.png",
+                        "dashboard_logo": "http://stagingdemo.loyaltyxpert.staging:7002/lxmedia/tenant/6288853995/mobile_branding/dashboard_logo/dashboard_logo_file_5_6288853995_1577278288.png",
+                        "splash_screen_string": "http://stagingdemo.loyaltyxpert.staging:7002/lxmedia/tenant/6288853995/mobile_branding/splash_screen/splash_screen_string_file_5_6288853995_1577278288.png",
+                        "listing_icon": "http://stagingdemo.loyaltyxpert.staging:7002/lxmedia/tenant/6288853995/mobile_branding/listing_icon/listing_icon_file_5_6288853995_1577278288.png"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 : Bad Request : Missing Header Parameter": {
+                    "value": {
+                      "code": 400,
+                      "message": "Some header parameters are missing, kindly check and try again."
+                    }
+                  },
+                  "400 : Bad Request : Application ID Invalid": {
+                    "value": {
+                      "code": 400,
+                      "message": "Invalid Application ID."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-mobile-branding",
+        "description": "Return tenant branding information. Brading information as below\n\n1. Splash Screen Image\n2. Dashboard Logo",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            },
+            "in": "header",
+            "name": "Content-Type",
+            "description": "",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Mi A3, Samsung Note, Oppo 11 pro"
+            },
+            "in": "header",
+            "name": "X-device-id",
+            "required": true,
+            "description": "Mobile device unique id"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "en"
+            },
+            "in": "header",
+            "name": "X-device-name",
+            "required": true,
+            "description": "Mobile device name like MI A3, Samsung Note 1 etc\n"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "en,hn,tl"
+            },
+            "in": "header",
+            "name": "X-localisation",
+            "required": true,
+            "description": "Set application language"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "com.[tenanat_id].loyalty"
+            },
+            "in": "header",
+            "name": "X-application-id",
+            "required": true,
+            "description": "Application bundle name that store in backend portal."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "",
+              "enum": [
+                "android",
+                "ios"
+              ],
+              "default": ""
+            },
+            "in": "header",
+            "name": "X-platform",
+            "required": true,
+            "description": "Mobile device OS type"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "5.0, 7.0, 9.0"
+            },
+            "in": "header",
+            "name": "X-platform-version",
+            "required": true,
+            "description": "Mobile device OS version"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2.0, 2.3, 3.0"
+            },
+            "in": "header",
+            "name": "X-app-version",
+            "required": true,
+            "description": "Active version of API"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-device-mac-address",
+            "required": true,
+            "description": "Mobile device mac-address"
+          }
+        ]
+      }
+    },
+    "/get-customer-type": {
+      "get": {
+        "summary": "Get Customer Group List",
+        "tags": [
+          "mobile",
+          "branding",
+          "3.0"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK : Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cust_category_id": {
+                            "type": "string"
+                          },
+                          "cust_category_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 : OK": {
+                    "value": {
+                      "code": 200,
+                      "message": "Data fetched successfully",
+                      "data": [
+                        {
+                          "cust_category_id": 83,
+                          "cust_category_name": "Electrician"
+                        },
+                        {
+                          "cust_category_id": 122,
+                          "cust_category_name": "retailer "
+                        },
+                        {
+                          "cust_category_id": 128,
+                          "cust_category_name": "test group 1"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 : Bad Request : Missing Header Parameter": {
+                    "value": {
+                      "code": 400,
+                      "message": "Some header parameters are missing, kindly check and try again."
+                    }
+                  },
+                  "400 : Bad Request : Application ID Invalid": {
+                    "value": {
+                      "code": 400,
+                      "message": "Invalid Application ID."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-customer-type",
+        "description": "Return customer group list",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            },
+            "in": "header",
+            "name": "Content-Type",
+            "description": "",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Mi A3, Samsung Note, Oppo 11 pro"
+            },
+            "in": "header",
+            "name": "X-device-id",
+            "required": true,
+            "description": "Mobile device unique id"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "en"
+            },
+            "in": "header",
+            "name": "X-device-name",
+            "required": true,
+            "description": "Mobile device name like MI A3, Samsung Note 1 etc\n"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "en,hn,tl"
+            },
+            "in": "header",
+            "name": "X-localisation",
+            "required": true,
+            "description": "Set application language"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "com.[tenanat_id].loyalty"
+            },
+            "in": "header",
+            "name": "X-application-id",
+            "required": true,
+            "description": "Application bundle name that store in backend portal."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "",
+              "enum": [
+                "android",
+                "ios"
+              ],
+              "default": ""
+            },
+            "in": "header",
+            "name": "X-platform",
+            "required": true,
+            "description": "Mobile device OS type"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "5.0, 7.0, 9.0"
+            },
+            "in": "header",
+            "name": "X-platform-version",
+            "required": true,
+            "description": "Mobile device OS version"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2.0, 2.3, 3.0"
+            },
+            "in": "header",
+            "name": "X-app-version",
+            "required": true,
+            "description": "Active version of API"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-device-mac-address",
+            "required": true,
+            "description": "Mobile device mac-address"
+          }
+        ]
+      }
+    },
+    "/check-referral-code": {
+      "post": {
+        "summary": "Check Referral Code",
+        "operationId": "check-referral-code",
+        "responses": {
+          "200": {
+            "description": "OK : Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 : OK": {
+                    "value": {
+                      "code": 200,
+                      "message": "Referral code is valid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 : Bad Request : Missing Header Parameter": {
+                    "value": {
+                      "code": 400,
+                      "message": "Some header parameters are missing, kindly check and try again."
+                    }
+                  },
+                  "400 : Bad Request : Application ID Invalid": {
+                    "value": {
+                      "code": 400,
+                      "message": "Invalid Application ID."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Check entered referral code is valid or not.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            },
+            "in": "header",
+            "name": "Content-Type",
+            "description": "",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Mi A3, Samsung Note, Oppo 11 pro"
+            },
+            "in": "header",
+            "name": "X-device-id",
+            "required": true,
+            "description": "Mobile device unique id"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "en"
+            },
+            "in": "header",
+            "name": "X-device-name",
+            "required": true,
+            "description": "Mobile device name like MI A3, Samsung Note 1 etc\n"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "en,hn,tl"
+            },
+            "in": "header",
+            "name": "X-localisation",
+            "required": true,
+            "description": "Set application language"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "com.[tenanat_id].loyalty"
+            },
+            "in": "header",
+            "name": "X-application-id",
+            "required": true,
+            "description": "Application bundle name that store in backend portal."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "",
+              "enum": [
+                "android",
+                "ios"
+              ],
+              "default": ""
+            },
+            "in": "header",
+            "name": "X-platform",
+            "required": true,
+            "description": "Mobile device OS type"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "5.0, 7.0, 9.0"
+            },
+            "in": "header",
+            "name": "X-platform-version",
+            "required": true,
+            "description": "Mobile device OS version"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2.0, 2.3, 3.0"
+            },
+            "in": "header",
+            "name": "X-app-version",
+            "required": true,
+            "description": "Active version of API"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-device-mac-address",
+            "required": true,
+            "description": "Mobile device mac-address"
+          }
+        ],
+        "tags": [
+          "mobile",
+          "branding",
+          "3.0"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "referral_code": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Body Parameter": {
+                  "value": {
+                    "referral_code": "61A52C"
+                  }
+                }
+              }
+            }
+          },
+          "description": "referral_code"
+        }
+      }
+    },
+    "/request-otp": {
+      "post": {
+        "summary": "Login : Request OTP",
+        "operationId": "request-otp",
+        "responses": {
+          "200": {
+            "description": "OK : Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "otp": {
+                          "type": "number"
+                        },
+                        "customer_member_id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 : OK": {
+                    "value": {
+                      "code": 200,
+                      "message": "OTP sent successfully on your register mobile number",
+                      "data": {
+                        "otp": 7320,
+                        "customer_member_id": "4871619634"
+                      }
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "400 : Bad Request : Missing Header Parameter": {
+                    "value": {
+                      "code": 400,
+                      "message": "Some header parameters are missing, kindly check and try again."
+                    }
+                  },
+                  "400 : Bad Request : Application ID Invalid": {
+                    "value": {
+                      "code": 400,
+                      "message": "Invalid Application ID."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Login : Request OTP :  send on register mobile number",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            },
+            "in": "header",
+            "name": "Content-Type",
+            "description": "",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Mi A3, Samsung Note, Oppo 11 pro"
+            },
+            "in": "header",
+            "name": "X-device-id",
+            "required": true,
+            "description": "Mobile device unique id"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "en"
+            },
+            "in": "header",
+            "name": "X-device-name",
+            "required": true,
+            "description": "Mobile device name like MI A3, Samsung Note 1 etc\n"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "en,hn,tl"
+            },
+            "in": "header",
+            "name": "X-localisation",
+            "required": true,
+            "description": "Set application language"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "com.[tenanat_id].loyalty"
+            },
+            "in": "header",
+            "name": "X-application-id",
+            "required": true,
+            "description": "Application bundle name that store in backend portal."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "",
+              "enum": [
+                "android",
+                "ios"
+              ],
+              "default": ""
+            },
+            "in": "header",
+            "name": "X-platform",
+            "required": true,
+            "description": "Mobile device OS type"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "5.0, 7.0, 9.0"
+            },
+            "in": "header",
+            "name": "X-platform-version",
+            "required": true,
+            "description": "Mobile device OS version"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2.0, 2.3, 3.0"
+            },
+            "in": "header",
+            "name": "X-app-version",
+            "required": true,
+            "description": "Active version of API"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-device-mac-address",
+            "required": true,
+            "description": "Mobile device mac-address"
+          }
+        ],
+        "tags": [
+          "mobile",
+          "branding",
+          "3.0"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "mobile_number": {
+                    "type": "number"
+                  }
+                }
+              },
+              "examples": {
+                "Body Parameter": {
+                  "value": {
+                    "mobile_number": "123456789"
+                  }
+                }
+              }
+            }
+          },
+          "description": "mobile_number : Number type : Mnust be 10 digit only"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "X-auth-token": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "header"
+      }
+    }
+  },
+  "security": []
+}
